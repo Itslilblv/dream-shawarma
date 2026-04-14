@@ -15,36 +15,50 @@
             overflow-x: hidden;
         }
         
-        /* أنيميشن الخلفية العائمة */
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
             100% { transform: translateY(0px); }
         }
         .bg-pattern {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.05;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.08;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="80" font-size="50">🌯</text></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="80" x="50" font-size="50">🍔</text></svg>');
             background-size: 100px 100px;
             animation: float 10s infinite ease-in-out;
         }
 
-        .section-card { background: #121212; border-radius: 1.5rem; padding: 1.2rem; border: 1px solid #1f1f1f; margin-bottom: 1.5rem; }
+        /* تعديل الشفافية هنا */
+        .section-card { 
+            background: rgba(18, 18, 18, 0.6); 
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem; 
+            padding: 1.2rem; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            margin-bottom: 1.5rem; 
+        }
+
         .tab-active { background-color: #f97316 !important; color: black !important; font-weight: 900; }
         .happy-banner { background: linear-gradient(90deg, #f97316, #ea580c); color: black; font-weight: 900; }
+        
+        .delivery-toggle {
+            display: flex; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 4px; margin-bottom: 10px;
+        }
+        .delivery-toggle button { flex: 1; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: bold; transition: 0.3s; }
+        .toggle-active { background: #f97316; color: black; }
     </style>
 </head>
 <body class="pb-40">
     <div class="bg-pattern"></div>
 
-    <nav class="fixed top-0 w-full bg-black/95 backdrop-blur-md z-50 border-b border-white/5 p-4 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <img src="https://i.ibb.co/3W6s5L4/dream-shawarma-logo.png" alt="Logo" class="h-8 w-8 object-contain">
+    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/5 p-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <img src="https://i.ibb.co/3W6s5L4/dream-shawarma-logo.png" alt="Logo" class="h-10 w-10 object-contain">
             <h1 class="text-xl font-black text-orange-500 italic">DREAM SHAWARMA</h1>
         </div>
         <div id="branch-tag" class="bg-orange-500 text-black px-3 py-1 rounded-full text-[10px] font-black shadow-lg">فرع شارع 32</div>
     </nav>
 
-    <div id="happy-banner" class="hidden mt-16 happy-banner py-2 text-center text-xs animate-pulse">
+    <div id="happy-banner" class="hidden mt-20 happy-banner py-2 text-center text-xs animate-pulse">
         🔥 عرض السعادة مفعّل الآن (خصم 2 ريال على الأصناف المختارة) 🔥
     </div>
 
@@ -57,8 +71,19 @@
 
     <main id="menu-root" class="max-w-xl mx-auto px-4"></main>
 
-    <div id="cart-footer" class="fixed bottom-0 w-full bg-[#121212] border-t border-white/10 p-4 z-50 hidden shadow-2xl">
-        <div id="cart-items" class="max-h-32 overflow-y-auto mb-3 space-y-2"></div>
+    <div id="cart-footer" class="fixed bottom-0 w-full bg-[#121212]/95 backdrop-blur-xl border-t border-white/10 p-4 z-50 hidden shadow-2xl rounded-t-3xl">
+        
+        <div class="delivery-toggle">
+            <button id="btn-takeaway" onclick="setOrderType('استلام')" class="toggle-active">📦 استلام من الفرع</button>
+            <button id="btn-delivery" onclick="setOrderType('توصيل')">🚗 توصيل للمنزل</button>
+        </div>
+        
+        <div id="delivery-note" class="hidden text-[10px] text-orange-400 text-center mb-2 animate-bounce">
+            ⚠️ يرجى إرسال موقعك (Location) بعد إرسال الطلب
+        </div>
+
+        <div id="cart-items" class="max-h-24 overflow-y-auto mb-3 space-y-2"></div>
+        
         <button onclick="checkout()" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex justify-between px-6 items-center shadow-lg active:scale-95 transition">
             <span>إرسال الطلب عبر واتساب</span>
             <span id="total-price" class="bg-black/10 px-3 py-1 rounded-lg">0 ريال</span>
@@ -68,6 +93,7 @@
     <script>
         const branches = { 'شارع 32': '966549113072', 'حدا': '966546656090', 'خط العين': '966549113072', 'المجاهدين': '966549113072' };
         let activeBranch = 'شارع 32';
+        let orderType = 'استلام';
         let cart = [];
 
         const imgs = {
@@ -102,7 +128,6 @@
 
         function isHappy() {
             const d = new Date();
-            // تفعيل العرض الأحد والاثنين
             return (d.getDay() === 0 || d.getDay() === 1) && (d.getHours() >= 17 && d.getHours() < 19);
         }
 
@@ -111,6 +136,13 @@
             document.getElementById('branch-tag').innerText = 'فرع ' + name;
             document.querySelectorAll('.branch-btn').forEach(b => b.classList.remove('tab-active'));
             btn.classList.add('tab-active');
+        }
+
+        function setOrderType(type) {
+            orderType = type;
+            document.getElementById('btn-takeaway').className = type === 'استلام' ? 'toggle-active' : '';
+            document.getElementById('btn-delivery').className = type === 'توصيل' ? 'toggle-active' : '';
+            document.getElementById('delivery-note').classList.toggle('hidden', type !== 'توصيل');
         }
 
         function render() {
@@ -164,9 +196,13 @@
         }
 
         function checkout() {
-            let t = `طلب جديد من شاورما دريم 🌯\nالفرع: *${activeBranch}*\n\n`;
+            let t = `طلب جديد - شاورما دريم 🌯\n`;
+            t += `الفرع: *${activeBranch}*\n`;
+            t += `نوع الطلب: *${orderType}*\n\n`;
             cart.forEach(i => t += `• ${i.n} (${i.p} ريال)\n`);
             t += `\n*الإجمالي: ${cart.reduce((s, i) => s + i.p, 0)} ريال*`;
+            if(orderType === 'توصيل') t += `\n\n📍 _بانتظار إرسال الموقع الخاص بك.._`;
+            
             window.open(`https://wa.me/${branches[activeBranch]}?text=${encodeURIComponent(t)}`, '_blank');
         }
 
