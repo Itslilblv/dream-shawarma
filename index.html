@@ -16,89 +16,97 @@
             position: relative;
         }
 
-        /* أنيميشن الخلفية العائمة */
+        /* أنيميشن العناصر العائمة في الخلفية (فوق وتحت) */
         @keyframes floatUpDown {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(30px); }
-            100% { transform: translateY(0); }
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(0, 20px); }
+            100% { transform: translate(0, 0); }
         }
 
         .bg-pattern {
-            position: fixed;
+            position: absolute;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
-            z-index: -1;
-            opacity: 0.15;
+            z-index: -1; 
+            opacity: 0.1; 
             background-image: 
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="80" font-size="60">🌯</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="80" font-size="60">🍔</text></svg>');
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="100" font-size="60" opacity="1">🌯</text></svg>'),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="100" font-size="60" opacity="1">🍔</text></svg>');
             background-repeat: repeat;
-            background-size: 100px;
-            animation: floatUpDown 10s infinite ease-in-out;
+            background-size: 80px; 
+            animation: floatUpDown 15s infinite ease-in-out; 
         }
 
-        /* المنيو شفاف */
+        /* البطاقات شفافة تماماً لتظهر الخلفية */
         .section-card { 
-            background: rgba(25, 25, 25, 0.65) !important; 
-            backdrop-blur: 15px;
-            border-radius: 2.5rem; 
+            background: rgba(20,20,20,0.7) !important; 
+            backdrop-blur: 10px; 
+            border-radius: 2rem; 
             padding: 1.5rem; 
-            border: 1px solid rgba(255,255,255,0.05); 
-            margin-bottom: 2.5rem; 
-            transition: all 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.03); 
+            margin-bottom: 2rem; 
+            transition: all 0.4s ease; 
+            opacity: 0; 
+            transform: translateY(20px); 
         }
+        .section-card.visible { opacity: 1; transform: translateY(0); }
 
-        /* تكبير اللوجو */
-        .logo-text {
-            font-size: 2.2rem; /* حجم أكبر */
-            font-weight: 900;
-            color: #f97316;
-            font-style: italic;
-            letter-spacing: -2px;
-            text-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
-        }
-
-        .bubble-img {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #f97316;
-            background-color: #222;
-        }
-
-        .tab-active { background-color: #f97316 !important; color: black !important; font-weight: 900; }
+        .tab-active { background-color: #f97316 !important; color: black !important; font-weight: 900; transform: scale(1.05); }
         .happy-banner { background: linear-gradient(90deg, #f97316, #ea580c); color: black; font-weight: 900; }
+        .cart-pop { animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .insta-btn { transition: all 0.3s ease; }
+        .insta-btn:hover { color: #E1306C; transform: scale(1.1); }
+        
+        .item-row:hover { border-color: rgba(249, 115, 22, 0.4) !important; background-color: rgba(255,255,255,0.02) !important; }
+
+        /* ستايل الصور في فقاعات دائرية */
+        .bubble-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 3px solid rgba(249, 115, 22, 0.2); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+        }
     </style>
 </head>
 <body class="pb-40">
     <div class="bg-pattern"></div>
 
-    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/5 p-5 flex justify-between items-center">
-        <h1 class="logo-text">DREAM SHAWARMA</h1>
-        <div id="branch-tag" class="bg-orange-500 text-black px-4 py-1.5 rounded-full text-xs font-black">فرع شارع 32</div>
+    <nav class="fixed top-0 w-full bg-black/95 backdrop-blur-md z-50 border-b border-white/5 p-4 flex justify-between items-center shadow-lg">
+        <h1 class="text-2xl font-black text-orange-500 italic tracking-tighter">DREAM SHAWARMA</h1>
+        <div id="branch-tag" class="bg-orange-500 text-black px-3 py-1 rounded-full text-[10px] md:text-xs font-black shadow-md">فرع شارع 32</div>
     </nav>
 
-    <div id="happy-banner" class="hidden mt-24 py-2 text-center text-xs happy-banner animate-pulse">
-        🎁 عرض السعادة مفعّل الآن - خصم 2 ريال على الوجبات و العربي 🔥
+    <div id="happy-banner" class="hidden mt-16 happy-banner py-2 text-center text-[10px] md:text-xs shadow-inner animate-pulse">
+        🎁 عرض السعادة مفعّل الآن (الأحد والاثنين) - خصم 2 ريال على الوجبات و العربي 🔥
     </div>
 
-    <div class="pt-32 px-4 flex flex-wrap justify-center gap-2 mb-10">
-        <button onclick="setBranch('شارع 32', '966549113072', this)" class="branch-btn tab-active bg-white/5 px-5 py-2.5 rounded-2xl text-xs transition-all">شارع 32</button>
-        <button onclick="setBranch('حدا', '966546656090', this)" class="branch-btn bg-white/5 px-5 py-2.5 rounded-2xl text-xs transition-all">حدا</button>
-        <button onclick="setBranch('خط العين', '966549113072', this)" class="branch-btn bg-white/5 px-5 py-2.5 rounded-2xl text-xs transition-all">خط العين</button>
-        <button onclick="setBranch('المجاهدين', '966549113072', this)" class="branch-btn bg-white/5 px-5 py-2.5 rounded-2xl text-xs transition-all">المجاهدين</button>
+    <div class="pt-28 px-4 flex flex-wrap justify-center gap-2 mb-8 z-20">
+        <button onclick="setBranch('شارع 32', '966549113072', this)" class="branch-btn tab-active bg-white/5 px-4 py-2 rounded-xl text-[10px] md:text-sm transition-all hover:bg-white/10 active:scale-95 shadow-lg shadow-orange-500/10">شارع 32</button>
+        <button onclick="setBranch('حدا', '966546656090', this)" class="branch-btn bg-white/5 px-4 py-2 rounded-xl text-[10px] md:text-sm transition-all hover:bg-white/10 active:scale-95 shadow-lg shadow-white/5">حدا</button>
+        <button onclick="setBranch('خط العين', '966549113072', this)" class="branch-btn bg-white/5 px-4 py-2 rounded-xl text-[10px] md:text-sm transition-all hover:bg-white/10 active:scale-95 shadow-lg shadow-white/5">خط العين</button>
+        <button onclick="setBranch('المجاهدين', '966549113072', this)" class="branch-btn bg-white/5 px-4 py-2 rounded-xl text-[10px] md:text-sm transition-all hover:bg-white/10 active:scale-95 shadow-lg shadow-white/5">المجاهدين</button>
     </div>
 
     <main id="menu-root" class="max-w-2xl mx-auto px-4 space-y-6"></main>
 
-    <div id="cart-footer" class="fixed bottom-0 w-full bg-black/95 backdrop-blur-xl border-t border-white/10 p-5 z-50 hidden rounded-t-3xl shadow-2xl">
-        <div id="cart-items" class="max-h-32 overflow-y-auto mb-4 space-y-2"></div>
-        <button onclick="checkout()" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex justify-between px-8 items-center active:scale-95 transition-all">
+    <footer class="text-center py-12 mt-10 z-20">
+        <p class="text-xs mb-3 italic opacity-60">تابعنا على إنستقرام</p>
+        <a href="https://instagram.com/_itlulp" target="_blank" class="insta-btn text-4xl">
+            <i class="fa-brands fa-instagram"></i>
+            <span class="block text-[10px] mt-1 font-bold">@_itlulp</span>
+        </a>
+    </footer>
+
+    <div id="cart-footer" class="fixed bottom-0 w-full bg-[#121212]/98 backdrop-blur-lg border-t border-white/10 p-4 z-50 hidden cart-pop shadow-2xl rounded-t-3xl">
+        <div id="cart-items" class="max-h-32 overflow-y-auto mb-3 space-y-2"></div>
+        <button onclick="checkout()" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex justify-between px-6 items-center shadow-lg active:scale-95 transition-transform hover:shadow-green-500/20">
             <span>إرسال الطلب عبر واتساب</span>
-            <span id="total-price" class="bg-black/10 px-4 py-1 rounded-xl">0 ريال</span>
+            <span id="total-price" class="bg-black/20 px-4 py-1.5 rounded-xl font-black">0 ريال</span>
         </button>
     </div>
 
@@ -107,26 +115,42 @@
         let activeBranch = 'شارع 32';
         let cart = [];
 
-        // روابط صور مباشرة ومستقرة
+        // الصور الموحدة في فقاعات دائرية
         const imgs = {
-            sh: "https://images.deliveryhero.io/image/talabat/Menuitems/637731388514104085.jpg", // شاورما
-            bg: "https://images.deliveryhero.io/image/talabat/Menuitems/637731388487373024.jpg", // برجر
-            it: "https://images.deliveryhero.io/image/talabat/Menuitems/637731388439396253.jpg", // إيطالي
-            dr: "https://images.deliveryhero.io/image/talabat/Menuitems/637731388373732049.jpg", // بيبسي
-            wa: "https://images.deliveryhero.io/image/talabat/Menuitems/637731388331189035.jpg"  // ماء
+            /* تم إعادة رابط الصورة الموحد للمشروبات هنا لقسم الشاورما */
+            sh: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=400", 
+            bg: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=400", // برجر موحد
+            it: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=400", // باشكة/إيطالي موحد
+            dr: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=400", // مشروبات موحدة
+            wa: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=80&w=400"  // ماء موحد
         };
 
         const menuData = {
             "🌯 قسم الشاورما والصحون": [
-                {n:"شاورما دجاج صغير", p:6, i:imgs.sh}, {n:"شاورما دجاج كبير", p:8, i:imgs.sh}, {n:"صحن عربي كبير", p:19, i:imgs.sh}, {n:"صحن عربي وسط", p:16, i:imgs.sh}, {n:"صحن بطاطس كبير", p:15, i:imgs.sh}
+                {n:"شاورما دجاج صغير", p:6, i:imgs.sh}, {n:"شاورما دجاج كبير", p:8, i:imgs.sh}, {n:"شاورما صغير بالجبنة", p:7, i:imgs.sh}, {n:"شاورما كبير بالجبنة", p:9, i:imgs.sh},
+                {n:"صحن عربي كبير", p:19, i:imgs.sh}, {n:"صحن عربي كبير بالجبنة", p:20, i:imgs.sh}, {n:"صحن عربي وسط", p:16, i:imgs.sh}, {n:"صحن عربي وسط بالجبنة", p:17, i:imgs.sh},
+                {n:"صحن عربي صغير", p:12, i:imgs.sh}, {n:"صحن عربي صغير بالجبنة", p:13, i:imgs.sh}, {n:"صحن بطاطس صغير", p:5, i:imgs.sh}, {n:"صحن بطاطس وسط", p:7, i:imgs.sh},
+                {n:"صحن بطاطس كبير", p:15, i:imgs.sh}, {n:"بطاطس كرسبي صغير", p:6, i:imgs.sh}, {n:"بطاطس كرسبي كبير", p:9, i:imgs.sh}
             ],
             "🍱 قسم الوجبات": [
-                {n:"وجبة برجر دجاج", p:15, i:imgs.bg}, {n:"وجبة برجر لحم", p:15, i:imgs.bg}, {n:"وجبة دبل برجر", p:20, i:imgs.bg}
+                {n:"وجبة برجر دجاج", p:15, i:imgs.bg}, {n:"وجبة برجر دجاج بالجبنة", p:16, i:imgs.bg}, {n:"وجبة برجر دجاج حراق", p:15, i:imgs.bg}, {n:"وجبة برجر حراق بالجبنة", p:16, i:imgs.bg},
+                {n:"وجبة برجر لحم", p:15, i:imgs.bg}, {n:"وجبة برجر لحم بالجبنة", p:16, i:imgs.bg}, {n:"وجبة برجر لحم حراق", p:15, i:imgs.bg}, {n:"وجبة برجر لحم حراق بالجبنة", p:16, i:imgs.bg},
+                {n:"وجبة دبل برجر", p:20, i:imgs.bg}, {n:"وجبة دبل بالجبنة", p:21, i:imgs.bg}, {n:"برجر زنجر", p:8, i:imgs.bg}, {n:"برجر زنجر بالجبنة", p:9, i:imgs.bg}
+            ],
+            "🍔 ساندوتشات و إضافات": [
+                {n:"برجر دجاج", p:8, i:imgs.bg}, {n:"برجر دجاج بالجبنة", p:9, i:imgs.bg}, {n:"برجر لحم", p:8, i:imgs.bg}, {n:"برجر لحم بالجبنة", p:9, i:imgs.bg},
+                {n:"برجر دبل", p:15, i:imgs.bg}, {n:"برجر دبل بالجبنة", p:16, i:imgs.bg}, {n:"برجر سمك", p:8, i:imgs.bg}, {n:"برجر جمبري", p:8, i:imgs.bg},
+                {n:"تورتيلا", p:9, i:imgs.bg}, {n:"باشكة ايطاليا", p:20, i:imgs.it}, {n:"إضافة جبنة", p:1, i:imgs.it, noD:true}
             ],
             "🥤 المشروبات": [
-                {n:"ماء", p:1, i:imgs.wa, noD:true}, {n:"بيبسي / مشروب", p:2.5, i:imgs.dr, noD:true}
+                {n:"ماء", p:1, i:imgs.wa, noD:true}, {n:"بيبسي / مشروب", p:2.5, i:imgs.dr, noD:true}, {n:"عصير مصاص", p:2, i:imgs.dr, noD:true}
             ]
         };
+
+        function isHappy() {
+            const d = new Date();
+            return (d.getDay() === 0 || d.getDay() === 1) && (d.getHours() >= 17 && d.getHours() < 19);
+        }
 
         function setBranch(name, phone, btn) {
             activeBranch = name;
@@ -137,21 +161,32 @@
 
         function render() {
             const root = document.getElementById('menu-root');
-            root.innerHTML = '';
+            const happy = isHappy();
+            if(happy) document.getElementById('happy-banner').classList.remove('hidden');
+
             for (const [cat, items] of Object.entries(menuData)) {
-                let s = `<div class="section-card"><h2 class="text-orange-500 font-black mb-6 text-xl border-r-4 border-orange-500 pr-4">${cat}</h2><div class="space-y-4">`;
+                let s = `<div class="section-card"><h2 class="text-orange-500 font-black mb-6 text-xl border-r-4 border-orange-500 pr-4 tracking-tight">${cat}</h2><div class="space-y-4">`;
                 items.forEach(item => {
-                    s += `<div class="flex items-center gap-4 bg-white/5 p-3 rounded-3xl border border-white/5">
-                        <img src="${item.i}" class="bubble-img" onerror="this.src='https://via.placeholder.com/100?text=FOOD'">
+                    const price = (happy && !item.noD) ? item.p - 2 : item.p;
+                    s += `<div class="item-row flex items-center gap-4 bg-white/5 p-3 rounded-3xl border border-white/5 transition-all">
+                        <img src="${item.i}" class="bubble-img"> 
                         <div class="flex-1">
-                            <h4 class="text-sm font-bold">${item.n}</h4>
-                            <span class="text-orange-500 font-black text-xl">${item.p} ريال</span>
+                            <h4 class="text-xs md:text-sm font-bold tracking-tight">${item.n}</h4>
+                            <span class="text-orange-500 font-black text-lg md:text-xl">${price} ريال</span>
+                            ${happy && !item.noD ? `<span class="text-xs text-gray-500 line-through mr-2">${item.p} ريال</span>` : ''}
                         </div>
-                        <button onclick="add('${item.n}', ${item.p})" class="bg-orange-500 text-black px-6 py-2.5 rounded-2xl font-black text-sm active:scale-90 transition">أضف</button>
+                        <button onclick="add('${item.n}', ${price})" class="bg-orange-500 text-black px-5 py-2.5 rounded-2xl font-black text-xs md:text-sm active:scale-90 transition shadow-lg shadow-orange-500/10 hover:shadow-orange-500/20">أضف</button>
                     </div>`;
                 });
                 root.innerHTML += s + `</div></div>`;
             }
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.section-card').forEach(card => observer.observe(card));
         }
 
         function add(n, p) {
@@ -168,16 +203,17 @@
             const f = document.getElementById('cart-footer');
             const itemsDiv = document.getElementById('cart-items');
             const totalSpan = document.getElementById('total-price');
+            
             cart.length > 0 ? f.classList.remove('hidden') : f.classList.add('hidden');
             itemsDiv.innerHTML = '';
             let total = 0;
             cart.forEach(i => {
                 total += i.p;
-                itemsDiv.innerHTML += `<div class="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 text-xs">
+                itemsDiv.innerHTML += `<div class="flex justify-between items-center bg-white/5 p-2 rounded-lg text-[9px] md:text-[10px] border border-white/5 cart-item-pop">
                     <span>${i.n}</span>
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-3">
                         <span class="text-orange-500 font-bold">${i.p} ريال</span>
-                        <button onclick="remove(${i.id})" class="text-red-500 font-black">X</button>
+                        <button onclick="remove(${i.id})" class="bg-red-500/20 text-red-500 px-3 py-1 rounded-lg font-black hover:bg-red-500 hover:text-white transition active:scale-90">X</button>
                     </div>
                 </div>`;
             });
@@ -185,18 +221,11 @@
         }
 
         function checkout() {
-            // رسالة واتساب نظيفة بدون كود
-            let text = `طلب جديد من شاورما دريم 🌯\n`;
-            text += `الفرع: *${activeBranch}*\n\n`;
-            cart.forEach(item => {
-                text += `• ${item.n} (${item.p} ريال)\n`;
-            });
-            const total = cart.reduce((sum, item) => sum + item.p, 0);
-            text += `\n*إجمالي الحساب: ${total} ريال*`;
-            
-            const phone = branches[activeBranch];
-            const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
-            window.open(url, '_blank');
+            let t = `طلب جديد - شاورما دريم 🌯%0Aالفرع: *${activeBranch}*%0A%0A`;
+            cart.forEach(i => t += `• ${i.n} (${i.p} ريال)%0A`);
+            const total = cart.reduce((s, i) => s + i.p, 0);
+            t += `%0A*إجمالي الحساب: ${total} ريال*`;
+            window.open(`https://wa.me/${branches[activeBranch]}?text=${encodeURIComponent(t)}`, '_blank');
         }
 
         render();
