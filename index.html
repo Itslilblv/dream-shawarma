@@ -6,6 +6,7 @@
     <title>شاورما دريم - المنيو الرسمي</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { 
             font-family: 'Tajawal', sans-serif; 
@@ -44,17 +45,29 @@
         }
         .delivery-toggle button { flex: 1; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: bold; transition: 0.3s; }
         .toggle-active { background: #f97316; color: black; }
+        
+        .social-btn {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 24px;
+            border-radius: 15px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+        .social-btn:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-2px); }
     </style>
 </head>
 <body class="pb-40">
     <div class="bg-pattern"></div>
 
     <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10 p-4 flex justify-between items-center shadow-2xl">
-        <div class="flex items-center gap-3">
-            <img src="https://i.ibb.co/3W6s5L4/dream-shawarma-logo.png" alt="Logo" class="h-10 w-10 object-contain drop-shadow-lg">
+        <div class="flex items-center">
             <h1 class="text-xl font-black text-orange-500 italic tracking-tighter">DREAM SHAWARMA</h1>
         </div>
-        <div id="branch-tag" class="bg-orange-500 text-black px-4 py-1.5 rounded-full text-[10px] font-black shadow-lg uppercase">فرع شارع 32</div>
+        <div id="branch-tag" class="bg-orange-500 text-black px-4 py-1.5 rounded-full text-[10px] font-black shadow-lg">فرع شارع 32</div>
     </nav>
 
     <div id="happy-banner" class="hidden mt-24 happy-banner py-2 text-center text-xs animate-pulse">
@@ -70,15 +83,29 @@
 
     <main id="menu-root" class="max-w-xl mx-auto px-4"></main>
 
+    <div class="max-w-xl mx-auto px-4 mb-20 flex flex-col items-center gap-4">
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest">تابعنا على</h3>
+        <div class="flex gap-4">
+            <a href="https://www.instagram.com/_itlulp" target="_blank" class="social-btn text-pink-500">
+                <i class="fab fa-instagram text-xl"></i>
+                <span class="font-bold">Instagram</span>
+            </a>
+            <a href="https://www.tiktok.com/@shawarmadream25" target="_blank" class="social-btn text-white">
+                <i class="fab fa-tiktok text-xl"></i>
+                <span class="font-bold">TikTok</span>
+            </a>
+        </div>
+    </div>
+
     <div id="cart-footer" class="fixed bottom-0 w-full bg-[#121212]/95 backdrop-blur-2xl border-t border-white/10 p-4 z-50 hidden shadow-2xl rounded-t-[2.5rem]">
         
         <div class="delivery-toggle">
-            <button id="btn-takeaway" onclick="setOrderType('استلام')" class="toggle-active">📦 استلام من الفرع</button>
-            <button id="btn-delivery" onclick="setOrderType('توصيل')">🚗 توصيل للمنزل</button>
+            <button id="btn-takeaway" onclick="setOrderType('استلام')" class="toggle-active">📦 استلام</button>
+            <button id="btn-delivery" onclick="setOrderType('توصيل')">🚗 توصيل</button>
         </div>
         
         <div id="delivery-note" class="hidden text-[10px] text-orange-400 text-center mb-2 animate-bounce">
-            ⚠️ يرجى إرسال موقعك (Location) بعد إرسال الطلب في الواتساب
+            ⚠️ يرجى إرسال الموقع بعد الطلب
         </div>
 
         <div id="cart-items" class="max-h-24 overflow-y-auto mb-3 space-y-2"></div>
@@ -90,7 +117,6 @@
     </div>
 
     <script>
-        // الأرقام المحدثة حسب طلبك
         const branches = { 
             'شارع 32': '966546656090', 
             'حدا': '966560883385', 
@@ -206,7 +232,7 @@
             t += `نوع الطلب: *${orderType}*\n\n`;
             cart.forEach(i => t += `• ${i.n} (${i.p} ريال)\n`);
             t += `\n*الإجمالي: ${cart.reduce((s, i) => s + i.p, 0)} ريال*`;
-            if(orderType === 'توصيل') t += `\n\n📍 _بانتظار إرسال الموقع الخاص بك.._`;
+            if(orderType === 'توصيل') t += `\n\n📍 _يرجى إرسال اللوكيشن الخاص بك.._`;
             
             window.open(`https://wa.me/${branches[activeBranch]}?text=${encodeURIComponent(t)}`, '_blank');
         }
