@@ -3,137 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>شاورما دريم - بحرة</title>
+    <title>شاورما دريم - الفروع الرسمية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #0a0a0a; color: white; scroll-behavior: smooth; }
-        .orange-glow { text-shadow: 0 0 20px rgba(249, 115, 22, 0.5); }
-        .card-shadow { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
+        .happy-glow { box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); border: 2px solid #f97316 !important; }
+        .section-card { background: #121212; border: 1px solid rgba(255,255,255,0.05); border-radius: 2rem; padding: 1.5rem; }
+        .tab-active { background-color: #f97316 !important; color: black !important; font-weight: 900; }
     </style>
 </head>
-<body class="pb-10">
+<body class="pb-20">
+
     <nav class="fixed top-0 w-full bg-black/95 backdrop-blur-md z-50 border-b border-white/5 p-4">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-black text-orange-500 tracking-tighter italic">DREAM SHAWARMA</h1>
-            <div id="active-branch-name" class="bg-orange-500 text-black px-3 py-1 rounded-full text-[10px] md:text-sm font-black">فرع شارع 32</div>
+            <h1 class="text-xl font-black text-orange-500 italic tracking-tighter">DREAM SHAWARMA</h1>
+            <div id="active-branch-label" class="bg-orange-500/10 text-orange-500 border border-orange-500/20 px-3 py-1 rounded-lg text-[10px] font-black">جاري تحديد الفرع...</div>
         </div>
     </nav>
 
-    <section class="pt-32 pb-12 px-4 text-center">
-        <h1 class="text-5xl md:text-7xl font-black mb-4 orange-glow tracking-tight">شاورما <span class="text-orange-500">دريم</span></h1>
-        <p class="text-gray-400 text-sm md:text-lg mb-8 italic">المذاق الأصلي في بحرة.. اختر فرعك واطلب الآن</p>
-        
-        <div class="flex flex-wrap justify-center gap-2 mb-10">
-            <button onclick="changeBranch('شارع 32', '966549113072')" class="branch-btn bg-orange-500 text-black px-4 py-2 rounded-xl text-sm font-bold transition-all">فرع شارع 32</button>
-            <button onclick="changeBranch('وحدة', '966546656090')" class="branch-btn bg-white/5 text-gray-400 px-4 py-2 rounded-xl text-sm font-bold hover:bg-white/10 transition-all">فرع وحدة</button>
-            <button onclick="changeBranch('خط العين', '966549113072')" class="branch-btn bg-white/5 text-gray-400 px-4 py-2 rounded-xl text-sm font-bold hover:bg-white/10 transition-all">فرع خط العين</button>
+    <div id="happy-banner" class="hidden mt-20 bg-orange-600 text-black py-2 text-center font-black text-sm">
+        🔥 مفعّل الآن: عرض السعادة (خصم 2 ريال على الأصناف المختارة) 🔥
+    </div>
+
+    <section class="pt-28 pb-6 px-4">
+        <p class="text-center text-gray-500 text-xs mb-4 font-bold italic">اختر الفرع الأقرب إليك للطلب:</p>
+        <div class="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto">
+            <button onclick="setBranch('شارع 32', '966549113072', this)" class="branch-tab bg-white/5 text-gray-400 px-4 py-2 rounded-xl text-xs transition-all tab-active">شارع 32</button>
+            <button onclick="setBranch('حدا', '966546656090', this)" class="branch-tab bg-white/5 text-gray-400 px-4 py-2 rounded-xl text-xs transition-all">حدا</button>
+            <button onclick="setBranch('خط العين', '966549113072', this)" class="branch-tab bg-white/5 text-gray-400 px-4 py-2 rounded-xl text-xs transition-all">خط العين</button>
+            <button onclick="setBranch('المجاهدين', '966549113072', this)" class="branch-tab bg-white/5 text-gray-400 px-4 py-2 rounded-xl text-xs transition-all">المجاهدين</button>
         </div>
     </section>
 
-    <main class="max-w-6xl mx-auto px-4 space-y-16">
-        
-        <div id="shawarma">
-            <h2 class="text-2xl font-black mb-6 text-orange-500 flex items-center gap-3">
-                <span class="w-10 h-1 bg-orange-500 rounded-full"></span> الشاورما
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-[#121212] rounded-[2.5rem] p-4 border border-white/5 group card-shadow">
-                    <img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?q=80&w=800" class="w-full h-48 object-cover rounded-[2rem] mb-4">
-                    <div class="flex justify-between items-center px-2 mb-4">
-                        <h3 class="text-lg font-bold text-white">صاروخ دجاج</h3>
-                        <span class="text-orange-500 font-black">14 ريال</span>
-                    </div>
-                    <button onclick="orderItem('صاروخ دجاج', '14 ريال')" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
-                        اطلب واتساب
-                    </button>
-                </div>
-                <div class="bg-[#121212] rounded-[2.5rem] p-4 border border-white/5 group card-shadow">
-                    <img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?q=80&w=800" class="w-full h-48 object-cover rounded-[2rem] mb-4">
-                    <div class="flex justify-between items-center px-2 mb-4">
-                        <h3 class="text-lg font-bold text-white">صحن عربي تريبل</h3>
-                        <span class="text-orange-500 font-black">29 ريال</span>
-                    </div>
-                    <button onclick="orderItem('صحن عربي تريبل', '29 ريال')" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
-                        اطلب واتساب
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div id="burger">
-            <h2 class="text-2xl font-black mb-6 text-orange-500 flex items-center gap-3">
-                <span class="w-10 h-1 bg-orange-500 rounded-full"></span> البرجر
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-[#121212] rounded-[2.5rem] p-4 border border-white/5 card-shadow">
-                    <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=800" class="w-full h-48 object-cover rounded-[2rem] mb-4">
-                    <div class="flex justify-between items-center px-2 mb-4">
-                        <h3 class="text-lg font-bold text-white">وجبة برجر دجاج</h3>
-                        <span class="text-orange-500 font-black">20 ريال</span>
-                    </div>
-                    <button onclick="orderItem('وجبة برجر دجاج', '20 ريال')" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
-                        اطلب واتساب
-                    </button>
-                </div>
-                <div class="bg-[#121212] rounded-[2.5rem] p-4 border border-white/5 card-shadow">
-                    <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=800" class="w-full h-48 object-cover rounded-[2rem] mb-4">
-                    <div class="flex justify-between items-center px-2 mb-4">
-                        <h3 class="text-lg font-bold text-white">وجبة برجر دبل</h3>
-                        <span class="text-orange-500 font-black">27 ريال</span>
-                    </div>
-                    <button onclick="orderItem('وجبة برجر دبل', '27 ريال')" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
-                        اطلب واتساب
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div id="drinks">
-            <h2 class="text-2xl font-black mb-6 text-orange-500 flex items-center gap-3">
-                <span class="w-10 h-1 bg-orange-500 rounded-full"></span> المشروبات والمياه
-            </h2>
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-[#121212] p-4 rounded-3xl border border-white/5 flex flex-col items-center">
-                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=800" class="w-20 h-20 object-cover rounded-full mb-3">
-                    <h3 class="text-sm font-bold mb-1">بيبسي / مشروب</h3>
-                    <span class="text-orange-500 font-black text-xs">3 ريال</span>
-                    <button onclick="orderItem('مشروب غازي', '3 ريال')" class="mt-3 w-full bg-[#25D366]/20 text-[#25D366] py-2 rounded-xl text-xs font-black">اطلب</button>
-                </div>
-                <div class="bg-[#121212] p-4 rounded-3xl border border-white/5 flex flex-col items-center">
-                    <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=800" class="w-20 h-20 object-cover rounded-full mb-3">
-                    <h3 class="text-sm font-bold mb-1">مياه معدنية</h3>
-                    <span class="text-orange-500 font-black text-xs">1 ريال</span>
-                    <button onclick="orderItem('مياه معدنية', '1 ريال')" class="mt-3 w-full bg-[#25D366]/20 text-[#25D366] py-2 rounded-xl text-xs font-black">اطلب</button>
-                </div>
-            </div>
-        </div>
+    <main class="max-w-4xl mx-auto px-4 space-y-8">
+        <div id="menu-container" class="space-y-8"></div>
     </main>
 
     <script>
-        let selectedBranch = { name: 'شارع 32', phone: '966549113072' };
+        let currentBranch = { name: 'شارع 32', phone: '966549113072' };
 
-        function changeBranch(name, phone) {
-            selectedBranch = { name, phone };
-            document.getElementById('active-branch-name').innerText = 'فرع ' + name;
+        const menuData = {
+            shawarma: [
+                {n: "شاورما دجاج صغير", p: 6}, {n: "شاورما دجاج كبير", p: 8},
+                {n: "شاورما دجاج صغير بالجبنة", p: 7}, {n: "شاورما دجاج كبير بالجبنة", p: 9},
+                {n: "صحن عربي كبير", p: 19}, {n: "صحن عربي وسط", p: 16}, {n: "صحن عربي صغير", p: 12}
+            ],
+            meals: [
+                {n: "وجبة برجر دجاج", p: 15}, {n: "وجبة برجر لحم", p: 15},
+                {n: "وجبة دبل برجر", p: 20}, {n: "وجبة دبل بالجبنة", p: 21},
+                {n: "برجر زنجر", p: 8}
+            ],
+            drinks: [
+                {n: "بيبسي", p: 2.5, noDiscount: true},
+                {n: "ماء", p: 1, noDiscount: true},
+                {n: "عصير مصاص", p: 2, noDiscount: true}
+            ]
+        };
+
+        function isHappyHour() {
+            const h = new Date().getHours();
+            return (h >= 17 && h < 19);
+        }
+
+        function setBranch(name, phone, btn) {
+            currentBranch = { name, phone };
+            document.getElementById('active-branch-label').innerText = 'تطلب من: فرع ' + name;
             
-            // تحديث ستايل الأزرار
-            document.querySelectorAll('.branch-btn').forEach(btn => {
-                if(btn.innerText.includes(name)) {
-                    btn.classList.add('bg-orange-500', 'text-black');
-                    btn.classList.remove('bg-white/5', 'text-gray-400');
-                } else {
-                    btn.classList.remove('bg-orange-500', 'text-black');
-                    btn.classList.add('bg-white/5', 'text-gray-400');
-                }
-            });
+            document.querySelectorAll('.branch-tab').forEach(t => t.classList.remove('tab-active'));
+            btn.classList.add('tab-active');
         }
 
-        function orderItem(item, price) {
-            const message = `مرحباً شاورما دريم 👋%0Aأود طلب: *${item}*%0Aالسعر: *${price}*%0Aالفرع المختقم: *${selectedBranch.name}*`;
-            const url = `https://wa.me/${selectedBranch.phone}?text=${message}`;
-            window.open(url, '_blank');
+        function renderMenu() {
+            const isHappy = isHappyHour();
+            const container = document.getElementById('menu-container');
+            const banner = document.getElementById('happy-banner');
+            container.innerHTML = '';
+            
+            if(isHappy) banner.classList.remove('hidden');
+
+            for (const [cat, items] of Object.entries(menuData)) {
+                let html = `<div class="section-card ${isHappy && cat !== 'drinks' ? 'happy-glow' : ''}">
+                    <h2 class="text-orange-500 font-black mb-4 text-lg">${cat==='shawarma'?'🌯 شاورما':cat==='meals'?'🍱 وجبات':'🥤 مشروبات'}</h2>
+                    <div class="grid gap-2">`;
+
+                items.forEach(item => {
+                    const price = (isHappy && !item.noDiscount) ? (item.p - 2) : item.p;
+                    html += `
+                        <div class="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/10">
+                            <span class="text-sm">${item.n}</span>
+                            <div class="flex items-center gap-3">
+                                <span class="font-black text-orange-500 text-sm">${price} ريال</span>
+                                <button onclick="sendOrder('${item.n}', '${price}')" class="bg-[#25D366] text-black px-3 py-1.5 rounded-lg font-black text-[10px]">اطلب</button>
+                            </div>
+                        </div>`;
+                });
+                html += `</div></div>`;
+                container.innerHTML += html;
+            }
         }
+
+        function sendOrder(name, price) {
+            const msg = `مرحباً شاورما دريم 👋%0Aأود طلب: *${name}*%0Aالسعر: *${price} ريال*%0Aالفرع: *${currentBranch.name}*`;
+            window.open(`https://wa.me/${currentBranch.phone}?text=${msg}`, '_blank');
+        }
+
+        // تشغيل أولي
+        document.getElementById('active-branch-label').innerText = 'تطلب من: فرع ' + currentBranch.name;
+        renderMenu();
     </script>
 </body>
 </html>
