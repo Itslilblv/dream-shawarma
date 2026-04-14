@@ -16,87 +16,87 @@
             position: relative;
         }
 
+        /* أنيميشن الخلفية العائمة */
         @keyframes floatUpDown {
-            0% { transform: translate(0, 0); }
-            50% { transform: translate(0, 25px); }
-            100% { transform: translate(0, 0); }
+            0% { transform: translateY(0); }
+            50% { transform: translateY(30px); }
+            100% { transform: translateY(0); }
         }
 
         .bg-pattern {
-            position: absolute;
+            position: fixed;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
             z-index: -1;
-            opacity: 0.12;
+            opacity: 0.15;
             background-image: 
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="100" font-size="60" opacity="1">🌯</text></svg>'),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="100" font-size="60" opacity="1">🍔</text></svg>');
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="80" font-size="60">🌯</text></svg>'),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="80" font-size="60">🍔</text></svg>');
             background-repeat: repeat;
-            background-size: 90px;
-            animation: floatUpDown 12s infinite ease-in-out;
+            background-size: 100px;
+            animation: floatUpDown 10s infinite ease-in-out;
         }
 
+        /* المنيو شفاف */
         .section-card { 
             background: rgba(25, 25, 25, 0.65) !important; 
-            backdrop-blur: 12px; 
-            border-radius: 2rem; 
+            backdrop-blur: 15px;
+            border-radius: 2.5rem; 
             padding: 1.5rem; 
             border: 1px solid rgba(255,255,255,0.05); 
-            margin-bottom: 2rem; 
-            transition: all 0.4s ease; 
+            margin-bottom: 2.5rem; 
+            transition: all 0.4s ease;
         }
 
         /* تكبير اللوجو */
-        .main-logo {
-            font-size: 2rem; /* تكبير الحجم */
+        .logo-text {
+            font-size: 2.2rem; /* حجم أكبر */
             font-weight: 900;
             color: #f97316;
             font-style: italic;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
             text-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
         }
 
-        .tab-active { background-color: #f97316 !important; color: black !important; font-weight: 900; }
-        
         .bubble-img {
             width: 85px;
             height: 85px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid rgba(249, 115, 22, 0.3);
-            background-color: #1a1a1a;
+            border: 3px solid #f97316;
+            background-color: #222;
         }
+
+        .tab-active { background-color: #f97316 !important; color: black !important; font-weight: 900; }
+        .happy-banner { background: linear-gradient(90deg, #f97316, #ea580c); color: black; font-weight: 900; }
     </style>
 </head>
 <body class="pb-40">
     <div class="bg-pattern"></div>
 
-    <nav class="fixed top-0 w-full bg-black/95 backdrop-blur-md z-50 border-b border-white/5 p-5 flex justify-between items-center">
-        <h1 class="main-logo">DREAM SHAWARMA</h1>
-        <div id="branch-tag" class="bg-orange-500 text-black px-4 py-1.5 rounded-full text-xs font-black shadow-lg">فرع شارع 32</div>
+    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/5 p-5 flex justify-between items-center">
+        <h1 class="logo-text">DREAM SHAWARMA</h1>
+        <div id="branch-tag" class="bg-orange-500 text-black px-4 py-1.5 rounded-full text-xs font-black">فرع شارع 32</div>
     </nav>
 
-    <div class="pt-32 px-4 flex flex-wrap justify-center gap-2 mb-8">
-        <button onclick="setBranch('شارع 32', this)" class="branch-btn tab-active bg-white/5 px-5 py-2.5 rounded-xl text-xs md:text-sm transition-all">شارع 32</button>
-        <button onclick="setBranch('حدا', this)" class="branch-btn bg-white/5 px-5 py-2.5 rounded-xl text-xs md:text-sm transition-all">حدا</button>
-        <button onclick="setBranch('خط العين', this)" class="branch-btn bg-white/5 px-5 py-2.5 rounded-xl text-xs md:text-sm transition-all">خط العين</button>
-        <button onclick="setBranch('المجاهدين', this)" class="branch-btn bg-white/5 px-5 py-2.5 rounded-xl text-xs md:text-sm transition-all">المجاهدين</button>
+    <div id="happy-banner" class="hidden mt-24 py-2 text-center text-xs happy-banner animate-pulse">
+        🎁 عرض السعادة مفعّل الآن - خصم 2 ريال على الوجبات و العربي 🔥
+    </div>
+
+    <div class="pt-32 px-4 flex flex-wrap justify-center gap-2 mb-10">
+        <button onclick="setBranch('شارع 32', '966549113072', this)" class="branch-btn tab-active bg-white/5 px-5 py-2.5 rounded-2xl text-xs transition-all">شارع 32</button>
+        <button onclick="setBranch('حدا', '966546656090', this)" class="branch-btn bg-white/5 px-5 py-2.5 rounded-2xl text-xs transition-all">حدا</button>
+        <button onclick="setBranch('خط العين', '966549113072', this)" class="branch-btn bg-white/5 px-5 py-2.5 rounded-2xl text-xs transition-all">خط العين</button>
+        <button onclick="setBranch('المجاهدين', '966549113072', this)" class="branch-btn bg-white/5 px-5 py-2.5 rounded-2xl text-xs transition-all">المجاهدين</button>
     </div>
 
     <main id="menu-root" class="max-w-2xl mx-auto px-4 space-y-6"></main>
 
-    <footer class="text-center py-12 mt-10">
-        <a href="https://instagram.com/_itlulp" target="_blank" class="text-4xl hover:text-pink-500 transition-colors">
-            <i class="fa-brands fa-instagram"></i>
-            <span class="block text-[10px] mt-1 font-black">@_itlulp</span>
-        </a>
-    </footer>
-
-    <div id="cart-footer" class="fixed bottom-0 w-full bg-[#121212]/98 backdrop-blur-xl border-t border-white/10 p-5 z-50 hidden rounded-t-3xl shadow-2xl">
+    <div id="cart-footer" class="fixed bottom-0 w-full bg-black/95 backdrop-blur-xl border-t border-white/10 p-5 z-50 hidden rounded-t-3xl shadow-2xl">
         <div id="cart-items" class="max-h-32 overflow-y-auto mb-4 space-y-2"></div>
-        <button onclick="checkout()" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex justify-between px-6 items-center hover:scale-[1.02] transition-transform">
+        <button onclick="checkout()" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex justify-between px-8 items-center active:scale-95 transition-all">
             <span>إرسال الطلب عبر واتساب</span>
             <span id="total-price" class="bg-black/10 px-4 py-1 rounded-xl">0 ريال</span>
         </button>
@@ -107,29 +107,28 @@
         let activeBranch = 'شارع 32';
         let cart = [];
 
-        // روابط صور جديدة ومباشرة
+        // روابط صور مباشرة ومستقرة
         const imgs = {
-            sh: "https://images.pexels.com/photos/10350125/pexels-photo-10350125.jpeg?auto=compress&cs=tinysrgb&w=400", 
-            bg: "https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=400",
-            it: "https://images.pexels.com/photos/1146760/pexels-photo-1146760.jpeg?auto=compress&cs=tinysrgb&w=400",
-            dr: "https://images.pexels.com/photos/2983101/pexels-photo-2983101.jpeg?auto=compress&cs=tinysrgb&w=400",
-            wa: "https://images.pexels.com/photos/1000084/pexels-photo-1000084.jpeg?auto=compress&cs=tinysrgb&w=400"
+            sh: "https://images.deliveryhero.io/image/talabat/Menuitems/637731388514104085.jpg", // شاورما
+            bg: "https://images.deliveryhero.io/image/talabat/Menuitems/637731388487373024.jpg", // برجر
+            it: "https://images.deliveryhero.io/image/talabat/Menuitems/637731388439396253.jpg", // إيطالي
+            dr: "https://images.deliveryhero.io/image/talabat/Menuitems/637731388373732049.jpg", // بيبسي
+            wa: "https://images.deliveryhero.io/image/talabat/Menuitems/637731388331189035.jpg"  // ماء
         };
 
         const menuData = {
             "🌯 قسم الشاورما والصحون": [
-                {n:"شاورما دجاج صغير", p:6, i:imgs.sh}, {n:"شاورما دجاج كبير", p:8, i:imgs.sh}, {n:"شاورما صغير بالجبنة", p:7, i:imgs.sh}, {n:"شاورما كبير بالجبنة", p:9, i:imgs.sh},
-                {n:"صحن عربي كبير", p:19, i:imgs.sh}, {n:"صحن عربي وسط", p:16, i:imgs.sh}, {n:"صحن عربي صغير", p:12, i:imgs.sh}, {n:"صحن بطاطس كبير", p:15, i:imgs.sh}
+                {n:"شاورما دجاج صغير", p:6, i:imgs.sh}, {n:"شاورما دجاج كبير", p:8, i:imgs.sh}, {n:"صحن عربي كبير", p:19, i:imgs.sh}, {n:"صحن عربي وسط", p:16, i:imgs.sh}, {n:"صحن بطاطس كبير", p:15, i:imgs.sh}
             ],
             "🍱 قسم الوجبات": [
-                {n:"وجبة برجر دجاج", p:15, i:imgs.bg}, {n:"وجبة برجر لحم", p:15, i:imgs.bg}, {n:"وجبة دبل برجر", p:20, i:imgs.bg}, {n:"برجر زنجر", p:8, i:imgs.bg}
+                {n:"وجبة برجر دجاج", p:15, i:imgs.bg}, {n:"وجبة برجر لحم", p:15, i:imgs.bg}, {n:"وجبة دبل برجر", p:20, i:imgs.bg}
             ],
             "🥤 المشروبات": [
-                {n:"ماء", p:1, i:imgs.wa}, {n:"بيبسي / مشروب", p:2.5, i:imgs.dr}, {n:"عصير مصاص", p:2, i:imgs.dr}
+                {n:"ماء", p:1, i:imgs.wa, noD:true}, {n:"بيبسي / مشروب", p:2.5, i:imgs.dr, noD:true}
             ]
         };
 
-        function setBranch(name, btn) {
+        function setBranch(name, phone, btn) {
             activeBranch = name;
             document.getElementById('branch-tag').innerText = 'فرع ' + name;
             document.querySelectorAll('.branch-btn').forEach(b => b.classList.remove('tab-active'));
@@ -138,16 +137,17 @@
 
         function render() {
             const root = document.getElementById('menu-root');
+            root.innerHTML = '';
             for (const [cat, items] of Object.entries(menuData)) {
                 let s = `<div class="section-card"><h2 class="text-orange-500 font-black mb-6 text-xl border-r-4 border-orange-500 pr-4">${cat}</h2><div class="space-y-4">`;
                 items.forEach(item => {
                     s += `<div class="flex items-center gap-4 bg-white/5 p-3 rounded-3xl border border-white/5">
-                        <img src="${item.i}" class="bubble-img" onerror="this.src='https://via.placeholder.com/80?text=Food'">
+                        <img src="${item.i}" class="bubble-img" onerror="this.src='https://via.placeholder.com/100?text=FOOD'">
                         <div class="flex-1">
-                            <h4 class="text-xs md:text-sm font-bold">${item.n}</h4>
-                            <span class="text-orange-500 font-black text-lg">${item.p} ريال</span>
+                            <h4 class="text-sm font-bold">${item.n}</h4>
+                            <span class="text-orange-500 font-black text-xl">${item.p} ريال</span>
                         </div>
-                        <button onclick="add('${item.n}', ${item.p})" class="bg-orange-500 text-black px-5 py-2 rounded-2xl font-black text-xs">أضف</button>
+                        <button onclick="add('${item.n}', ${item.p})" class="bg-orange-500 text-black px-6 py-2.5 rounded-2xl font-black text-sm active:scale-90 transition">أضف</button>
                     </div>`;
                 });
                 root.innerHTML += s + `</div></div>`;
@@ -173,25 +173,30 @@
             let total = 0;
             cart.forEach(i => {
                 total += i.p;
-                itemsDiv.innerHTML += `<div class="flex justify-between items-center bg-white/5 p-2 rounded-lg text-xs">
+                itemsDiv.innerHTML += `<div class="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 text-xs">
                     <span>${i.n}</span>
-                    <button onclick="remove(${i.id})" class="text-red-500 font-black">X</button>
+                    <div class="flex items-center gap-4">
+                        <span class="text-orange-500 font-bold">${i.p} ريال</span>
+                        <button onclick="remove(${i.id})" class="text-red-500 font-black">X</button>
+                    </div>
                 </div>`;
             });
             totalSpan.innerText = total + ' ريال';
         }
 
         function checkout() {
-            // تنظيف النص من أي أكواد برمجية
+            // رسالة واتساب نظيفة بدون كود
             let text = `طلب جديد من شاورما دريم 🌯\n`;
-            text += `الفرع: ${activeBranch}\n\n`;
-            cart.forEach(i => text += `- ${i.n} (${i.p} ريال)\n`);
-            const total = cart.reduce((s, i) => s + i.p, 0);
-            text += `\nإجمالي الحساب: ${total} ريال`;
+            text += `الفرع: *${activeBranch}*\n\n`;
+            cart.forEach(item => {
+                text += `• ${item.n} (${item.p} ريال)\n`;
+            });
+            const total = cart.reduce((sum, item) => sum + item.p, 0);
+            text += `\n*إجمالي الحساب: ${total} ريال*`;
             
-            // استخدام URL المخصص للواتساب بدون رموز كود
-            const whatsappUrl = `https://wa.me/${branches[activeBranch]}?text=${encodeURIComponent(text)}`;
-            window.open(whatsappUrl, '_blank');
+            const phone = branches[activeBranch];
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
         }
 
         render();
