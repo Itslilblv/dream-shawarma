@@ -1,0 +1,134 @@
+"use client";
+import React, { useState } from 'react';
+import { Menu, Star, Instagram, Music2, ShoppingCart, Flame, Clock, MapPin, MessageCircle } from 'lucide-react';
+
+export default function DreamShawarmaFinal() {
+  // تحديث الفروع: إضافة اسم "شارع 32" الشهير
+  const branches = [
+    { name: 'فرع بحرة (شارع 32)', phone: '966549113072', location: 'بحرة المجاهدين - شارع 32 العام' },
+    { name: 'فرع بحرة (وحدة)', phone: '966546656090', location: 'طريق مكة القديم - بحرة' },
+    { name: 'فرع خط العين', phone: '966549113072', location: 'طريق العين العام - بحرة' }
+  ];
+
+  const [selectedBranch, setSelectedBranch] = useState(branches[0]);
+
+  const sendWhatsApp = (itemName, price) => {
+    const message = `مرحباً شاورما دريم 👋%0Aأود طلب: *${itemName}*%0Aالسعر: *${price}*%0Aالفرع: *${selectedBranch.name}*`;
+    window.open(`https://wa.me/${selectedBranch.phone}?text=${message}`, '_blank');
+  };
+
+  const images = {
+    shawarma: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?q=80&w=800",
+    burger: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?q=80&w=800",
+    drinks: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=800"
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] text-white font-sans" dir="rtl">
+      {/* Navbar */}
+      <nav className="fixed top-0 w-full bg-black/95 backdrop-blur-md z-50 border-b border-white/5">
+        <div className="max-w-6xl mx-auto flex items-center justify-between p-4">
+          <h1 className="text-xl md:text-2xl font-black text-orange-500 italic">DREAM SHAWERMA</h1>
+          <div className="bg-white/5 p-1 rounded-xl flex gap-1">
+            {branches.map((b) => (
+              <button 
+                key={b.name}
+                onClick={() => setSelectedBranch(b)}
+                className={`px-2 py-1.5 rounded-lg text-[9px] md:text-sm transition ${selectedBranch.name === b.name ? 'bg-orange-500 text-black font-bold' : 'text-gray-400 hover:bg-white/10'}`}
+              >
+                {b.name.replace('فرع بحرة ', '')}
+              </button>
+            ))}
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="pt-40 pb-16 px-4 text-center">
+        <div className="inline-block bg-orange-500/10 border border-orange-500/20 text-orange-500 px-4 py-1 rounded-full text-xs font-bold mb-4">
+          📍 الطلب موجه لـ: {selectedBranch.name}
+        </div>
+        <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tighter">شاورما <span className="text-orange-500 text-shadow-glow">دريم</span></h1>
+        <p className="text-gray-500 text-lg max-w-lg mx-auto mb-8 font-light italic">
+          أطعم شاورما وبرجر في بحرة.. اطلب الحين لفرع {selectedBranch.name.split('(')[1].replace(')', '')}
+        </p>
+      </section>
+
+      {/* Menu Categories */}
+      <section className="max-w-6xl mx-auto px-4 space-y-16 pb-20">
+        {/* قسم الشاورما */}
+        <div>
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-orange-400">
+            <div className="w-8 h-[2px] bg-orange-400"></div> الشاورما
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[{n:'صاروخ دجاج', p:'14'}, {n:'عربي دريم (فرط)', p:'25'}, {n:'صحن عربي تريبل', p:'38'}].map((item, i) => (
+              <div key={i} className="bg-[#121212] border border-white/5 p-4 rounded-3xl group">
+                <div className="h-48 bg-cover bg-center rounded-2xl mb-4 grayscale-[20%] group-hover:grayscale-0 transition-all" style={{backgroundImage: `url(${images.shawarma})`}}></div>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-bold">{item.n}</h3>
+                  <span className="text-orange-500 font-black">{item.p} ريال</span>
+                </div>
+                <button onClick={() => sendWhatsApp(item.n, item.p + ' ريال')} className="w-full bg-[#25D366] text-black py-3 rounded-xl font-black flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
+                  <MessageCircle size={18} fill="black" /> اطلب للفرع
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* قسم البرجر */}
+        <div>
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-orange-400">
+            <div className="w-8 h-[2px] bg-orange-400"></div> البرجر
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[{n:'وجبة برجر دجاج', p:'20'}, {n:'برجر لحم دبل', p:'27'}, {n:'برجر زنجر', p:'21'}].map((item, i) => (
+              <div key={i} className="bg-[#121212] border border-white/5 p-4 rounded-3xl group">
+                <div className="h-48 bg-cover bg-center rounded-2xl mb-4 grayscale-[20%] group-hover:grayscale-0 transition-all" style={{backgroundImage: `url(${images.burger})`}}></div>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-bold">{item.n}</h3>
+                  <span className="text-orange-500 font-black">{item.p} ريال</span>
+                </div>
+                <button onClick={() => sendWhatsApp(item.n, item.p + ' ريال')} className="w-full bg-[#25D366] text-black py-3 rounded-xl font-black flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform">
+                  <MessageCircle size={18} fill="black" /> اطلب للفرع
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* قسم المشروبات */}
+        <div>
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-orange-400">
+            <div className="w-8 h-[2px] bg-orange-400"></div> المشروبات
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[{n:'عصير طازج', p:'10'}, {n:'مشروب غازي', p:'3'}, {n:'مياه معدنية', p:'1'}].map((item, i) => (
+              <div key={i} className="bg-[#121212] border border-white/5 p-3 rounded-2xl flex items-center gap-4 group">
+                <div className="w-16 h-16 bg-cover bg-center rounded-lg" style={{backgroundImage: `url(${images.drinks})`}}></div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-bold">{item.n}</h3>
+                  <p className="text-orange-500 text-xs font-black">{item.p} ريال</p>
+                </div>
+                <button onClick={() => sendWhatsApp(item.n, item.p + ' ريال')} className="bg-[#25D366] p-2 rounded-lg"><MessageCircle size={16} fill="black" /></button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 border-t border-white/5 bg-black/50">
+        <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-8 text-center md:text-right">
+          {branches.map((b) => (
+            <div key={b.name} className="space-y-1">
+              <h4 className="text-orange-500 font-black text-xs">{b.name}</h4>
+              <p className="text-gray-600 text-[10px]">{b.location}</p>
+            </div>
+          ))}
+        </div>
+      </footer>
+    </div>
+  );
+}
