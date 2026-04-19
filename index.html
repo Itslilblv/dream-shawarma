@@ -17,6 +17,7 @@
         #sidebar { position: fixed; right: -300px; top: 0; width: 300px; height: 100%; background: #0f0f0f; z-index: 500; transition: 0.4s; padding: 30px 20px; border-left: 1px solid #333; }
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 400; display: none; backdrop-filter: blur(4px); }
         .cart-panel { position: fixed; bottom: 0; width: 100%; background: #111; border-radius: 2rem 2rem 0 0; padding: 20px; z-index: 100; border-top: 2px solid #f97316; display: none; }
+        .drink-selector { background: #1c1c1c; border: 1px solid #333; border-radius: 1rem; padding: 10px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -28,10 +29,10 @@
             <h3 class="text-orange-500 font-black text-xl italic">SHAWARMA DREAM</h3>
             <button onclick="toggleSidebar()"><i class="fas fa-times text-2xl"></i></button>
         </div>
-        <div class="space-y-6">
-            <div class="p-4 bg-white/5 rounded-2xl border border-white/10 text-right">
+        <div class="space-y-6 text-right">
+            <div class="p-4 bg-white/5 rounded-2xl border border-white/10">
                 <p class="text-orange-500 font-bold mb-2"><i class="fas fa-pen-nib ml-2"></i>أرسل اقتراحك</p>
-                <textarea id="sugg-text" placeholder="اكتب اقتراحك هنا..." class="w-full bg-transparent border-none outline-none text-sm h-24 resize-none"></textarea>
+                <textarea id="sugg-text" placeholder="اكتب اقتراحك هنا..." class="w-full bg-transparent border-none outline-none text-sm h-24 resize-none text-white"></textarea>
                 <button onclick="sendSugg()" class="w-full bg-orange-600 text-black font-black py-2 rounded-xl mt-2 text-sm">إرسال</button>
             </div>
             <hr class="border-white/5">
@@ -44,50 +45,66 @@
     <section class="hero">
         <nav class="absolute top-0 w-full p-6 flex justify-between items-center z-10">
             <button onclick="openCart()" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md border border-white/10"><i class="fas fa-shopping-bag"></i></button>
-            <div class="font-black italic text-xl">SHAWARMA DREAM</div>
+            <div class="font-black italic text-xl tracking-tighter">SHAWARMA DREAM</div>
             <button onclick="toggleSidebar()" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md border border-white/10"><i class="fas fa-bars"></i></button>
         </nav>
         <div>
-            <h1 class="text-5xl font-black italic">Taste the <span class="text-orange-500">Dream</span></h1>
-            <button onclick="document.getElementById('menu-start').scrollIntoView({behavior:'smooth'})" class="mt-8 bg-orange-600 px-10 py-4 rounded-full font-black text-xl">اطلب الآن</button>
+            <h1 class="text-5xl font-black leading-tight italic">Taste the <span class="text-orange-500">Dream</span></h1>
+            <button onclick="document.getElementById('menu-start').scrollIntoView({behavior:'smooth'})" class="mt-8 bg-orange-600 px-10 py-4 rounded-full font-black text-xl shadow-lg transition active:scale-95">اطلب الآن</button>
         </div>
     </section>
 
     <div id="menu-start" class="flex overflow-x-auto gap-3 p-6 no-scrollbar">
         <button class="bg-orange-600 text-black px-6 py-2 rounded-full whitespace-nowrap font-bold">فرع شارع 32</button>
-        <button class="bg-white/5 border border-white/10 px-6 py-2 rounded-full whitespace-nowrap font-bold">فرع حدا</button>
+        <button class="bg-white/5 border border-white/10 px-6 py-2 rounded-full whitespace-nowrap font-bold opacity-60">فرع حدا</button>
     </div>
 
-    <main id="menu-container" class="px-5 pb-40">
-        </main>
+    <main id="menu-container" class="px-5 pb-48"></main>
 
     <div id="cart-panel" class="cart-panel">
         <div class="flex justify-between items-center mb-4">
             <h3 class="font-black text-xl">طلباتك 🛒</h3>
             <p id="total-price" class="text-orange-500 font-black text-2xl">0 ريال</p>
         </div>
+
+        <div class="drink-selector flex items-center justify-between gap-2">
+            <div class="flex-1">
+                <p class="text-[10px] text-gray-400 mb-1">إضافة مشروب؟</p>
+                <select id="soda-choice" class="w-full bg-transparent text-sm outline-none font-bold">
+                    <option value="بيبسي">بيبسي (2.5 ر.س)</option>
+                    <option value="سفن اب">سفن اب (2.5 ر.س)</option>
+                    <option value="حمضيات">حمضيات (2.5 ر.س)</option>
+                    <option value="ديو">ديو (2.5 ر.س)</option>
+                    <option value="ماء">ماء (1 ر.س)</option>
+                </select>
+            </div>
+            <button onclick="addDrinkFromCart()" class="bg-orange-600 text-black font-black px-4 py-2 rounded-xl text-xs uppercase">أضف</button>
+        </div>
+
         <div id="cart-items" class="max-h-32 overflow-y-auto mb-4 space-y-2"></div>
-        <button onclick="checkout()" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex justify-center items-center gap-2">إتمام الطلب عبر واتساب <i class="fab fa-whatsapp text-2xl"></i></button>
+        
+        <button onclick="checkout()" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex justify-center items-center gap-2 text-lg">
+            إتمام عبر واتساب <i class="fab fa-whatsapp text-2xl"></i>
+        </button>
     </div>
 
     <script>
         let cart = [];
-        // جميع الأصناف عادت كما كانت
         const menuData = {
-            "🌯 قسم الشاورما": [
+            "🌯 الشاورما والصحون": [
                 {n:"شاورما دجاج صغير", p:6, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200"},
                 {n:"شاورما دجاج كبير", p:8, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200"},
-                {n:"شاورما صغير بالجبنة", p:7, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200"},
-                {n:"صحن عربي صغير", p:12, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200"},
-                {n:"صحن عربي كبير", p:19, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200"}
+                {n:"صحن عربي صغير", p:12, img:"https://images.unsplash.com/photo-1562601556-9aa96be7a060?w=200"},
+                {n:"صحن عربي وسط", p:16, img:"https://images.unsplash.com/photo-1562601556-9aa96be7a060?w=200"},
+                {n:"صحن عربي كبير", p:19, img:"https://images.unsplash.com/photo-1562601556-9aa96be7a060?w=200"}
             ],
-            "🍔 قسم البرجر": [
-                {n:"برجر دجاج", p:10, img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200"},
-                {n:"برجر دجاج بالجبنة", p:12, img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200"},
+            "🍔 وجبات البرجر": [
                 {n:"وجبة برجر دجاج", p:15, img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200"},
-                {n:"وجبة برجر لحم", p:15, img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200"}
+                {n:"وجبة برجر لحم", p:15, img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200"},
+                {n:"وجبة دبل برجر", p:20, img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200"}
             ],
-            "🍟 قسم البطاطس": [
+            "🍟 الساندوتشات والبطاطس": [
+                {n:"برجر دجاج", p:10, img:"https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=200"},
                 {n:"بطاطس صغير", p:5, img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=200"},
                 {n:"بطاطس كبير", p:15, img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=200"}
             ]
@@ -96,63 +113,56 @@
         function render() {
             const container = document.getElementById('menu-container');
             container.innerHTML = '';
-            
-            // عرض الأقسام الأساسية
-            for (const [title, items] of Object.entries(menuData)) {
-                let html = `<div class="mb-8"><h2 class="text-lg font-black mb-3 border-r-4 border-orange-500 pr-2">${title}</h2><div class="horizontal-scroll">`;
+            for (const [section, items] of Object.entries(menuData)) {
+                let html = `<div class="mb-8"><h2 class="text-lg font-black mb-3 border-r-4 border-orange-500 pr-2">${section}</h2><div class="horizontal-scroll">`;
                 items.forEach(item => {
-                    html += `<div class="food-card"><img src="${item.itemImg || item.img}"><h4 class="text-[11px] font-bold h-8">${item.n}</h4><p class="text-orange-500 font-black text-xs my-1">${item.p} ريال</p><button onclick="addToCart('${item.n}', ${item.p})" class="w-full bg-orange-600 text-black font-black py-1.5 rounded-xl text-[10px]">أضف</button></div>`;
+                    html += `<div class="food-card"><img src="${item.img}"><h4 class="text-[11px] font-bold h-8">${item.n}</h4><p class="text-orange-500 font-black text-xs my-1">${item.p} ريال</p><button onclick="addToCart('${item.n}', ${item.p})" class="w-full bg-orange-600 text-black font-black py-1.5 rounded-xl text-[10px]">أضف</button></div>`;
                 });
                 container.innerHTML += html + `</div></div>`;
             }
-
-            // قسم المشروبات المصغر والذكي
-            let drinkHtml = `
-            <div class="mb-10">
-                <h2 class="text-lg font-black mb-3 border-r-4 border-orange-500 pr-2">🥤 المشروبات</h2>
-                <div class="horizontal-scroll">
-                    <div class="food-card !flex-none !w-40 border-orange-500/30">
-                        <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200" class="!h-20">
-                        <h4 class="text-[10px] font-bold">غازيات (اختر النوع)</h4>
-                        <select id="soda-type" class="w-full bg-black border border-white/20 text-[10px] rounded my-1 p-1">
-                            <option value="بيبسي">بيبسي</option>
-                            <option value="سفن اب">سفن اب</option>
-                            <option value="حمضيات">حمضيات</option>
-                            <option value="ديو">ديو</option>
-                            <option value="شاني">شاني</option>
-                        </select>
-                        <p class="text-orange-500 font-black text-xs">2.5 ريال</p>
-                        <button onclick="addSoda()" class="w-full bg-orange-600 text-black font-black py-1 rounded-lg text-[10px] mt-1">أضف</button>
-                    </div>
-                    <div class="food-card !flex-none !w-28">
-                        <img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=200" class="!h-20">
-                        <h4 class="text-[10px] font-bold">ماء</h4>
-                        <p class="text-orange-500 font-black text-xs my-1">1 ريال</p>
-                        <button onclick="addToCart('ماء', 1)" class="w-full bg-orange-600 text-black font-black py-1 rounded-lg text-[10px]">أضف</button>
-                    </div>
-                </div>
-            </div>`;
-            container.innerHTML += drinkHtml;
         }
 
-        function addSoda() { const type = document.getElementById('soda-type').value; addToCart(type, 2.5); }
-        function addToCart(name, price) { cart.push({name, price}); updateUI(); document.getElementById('cart-panel').style.display = 'block'; }
+        function addToCart(name, price) {
+            cart.push({name, price});
+            updateUI();
+            document.getElementById('cart-panel').style.display = 'block';
+        }
+
+        function addDrinkFromCart() {
+            const sel = document.getElementById('soda-choice');
+            const name = sel.value;
+            const price = (name === 'ماء') ? 1 : 2.5;
+            addToCart(name, price);
+        }
+
         function updateUI() {
-            const list = document.getElementById('cart-items'); list.innerHTML = ''; let total = 0;
+            const list = document.getElementById('cart-items');
+            list.innerHTML = '';
+            let total = 0;
             cart.forEach((item, index) => {
                 total += item.price;
-                list.innerHTML += `<div class="flex justify-between items-center bg-white/5 p-2 rounded-xl text-xs"><span>${item.name}</span><button onclick="cart.splice(${index},1);updateUI()" class="text-red-500"><i class="fas fa-trash"></i></button></div>`;
+                list.innerHTML += `<div class="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 text-sm">
+                    <span>${item.name}</span>
+                    <div class="flex items-center gap-3">
+                        <span class="text-orange-500 font-bold">${item.price} ر.س</span>
+                        <button onclick="cart.splice(${index},1);updateUI()" class="text-red-500"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                </div>`;
             });
             document.getElementById('total-price').innerText = total + ' ريال';
+            if(cart.length === 0) document.getElementById('cart-panel').style.display = 'none';
         }
+
         function checkout() {
-            let msg = `📦 طلب جديد\n`;
-            cart.forEach(i => msg += `• ${i.name}\n`);
-            msg += `💰 الإجمالي: ${cart.reduce((s,i)=>s+i.price,0)} ريال`;
+            let msg = `📦 *طلب جديد من شاورما دريم*\n---\n`;
+            cart.forEach(i => msg += `• ${i.name} (${i.price} ر.س)\n`);
+            msg += `---\n💰 *الإجمالي: ${cart.reduce((s,i)=>s+i.price,0)} ريال*`;
             window.open(`https://wa.me/966546656090?text=${encodeURIComponent(msg)}`);
         }
+
+        function openCart() { if(cart.length > 0) document.getElementById('cart-panel').style.display = 'block'; }
         function toggleSidebar() { const s = document.getElementById('sidebar'); const o = document.getElementById('overlay'); const open = s.style.right === '0px'; s.style.right = open ? '-300px' : '0px'; o.style.display = open ? 'none' : 'block'; }
-        function sendSugg() { alert('تم استلام اقتراحك'); toggleSidebar(); }
+        function sendSugg() { alert('شكراً لاقتراحك!'); toggleSidebar(); }
         render();
     </script>
 </body>
