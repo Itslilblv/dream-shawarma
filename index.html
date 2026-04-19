@@ -3,23 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dream Shawarma | المنيو الشامل</title>
+    <title>Dream Shawarma</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #0a0a0a; color: white; overflow-x: hidden; }
-        .horizontal-scroll { display: flex; overflow-x: auto; gap: 12px; padding: 15px 5px; scrollbar-width: none; }
-        .food-card { flex: 0 0 160px; background: rgba(255, 255, 255, 0.03); border-radius: 1.5rem; padding: 10px; border: 1px solid rgba(255,255,255,0.08); }
-        .food-card img { width: 100%; height: 100px; object-fit: cover; border-radius: 1rem; }
+        body { font-family: 'Tajawal', sans-serif; background-color: #0a0a0a; color: white; margin: 0; overflow-x: hidden; }
         
-        #sidebar { position: fixed; right: -280px; top: 0; width: 280px; height: 100%; background: #0f0f0f; z-index: 300; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 40px 20px; border-left: 1px solid #222; }
+        /* الواجهة الكبيرة بناءً على الصورة */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), #0a0a0a), 
+                        url('https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=800');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+            position: relative;
+        }
+
+        .hero-title { font-size: 3rem; font-weight: 900; line-height: 1; }
+        .hero-subtitle { letter-spacing: 4px; font-size: 0.7rem; color: #f97316; font-weight: bold; margin-bottom: 0.5rem; }
+
+        .btn-order { background: #d35400; color: white; padding: 12px 40px; border-radius: 2rem; font-weight: 900; font-size: 1.2rem; margin-top: 2rem; }
+
+        /* أزرار الفروع */
+        .branch-scroll { display: flex; overflow-x: auto; gap: 10px; padding: 20px; scrollbar-width: none; }
+        .branch-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px 25px; border-radius: 1rem; white-space: nowrap; font-size: 14px; }
+        .branch-active { background: #f97316; color: black; font-weight: bold; }
+
+        /* المنيو الأفقي */
+        .horizontal-scroll { display: flex; overflow-x: auto; gap: 15px; padding: 10px 0; scrollbar-width: none; }
+        .food-card { flex: 0 0 170px; background: rgba(255, 255, 255, 0.04); border-radius: 1.5rem; padding: 12px; border: 1px solid rgba(255,255,255,0.08); }
+        .food-card img { width: 100%; height: 110px; object-fit: cover; border-radius: 1rem; }
+
+        #sidebar { position: fixed; right: -280px; top: 0; width: 280px; height: 100%; background: #0f0f0f; z-index: 300; transition: 0.4s; padding: 40px 20px; border-left: 1px solid #222; }
         #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 250; display: none; backdrop-filter: blur(4px); }
-        
-        .cart-footer { position: fixed; bottom: 0; width: 100%; background: rgba(15,15,15,0.98); backdrop-blur: 20px; border-radius: 2rem 2rem 0 0; padding: 15px 20px; z-index: 100; border-top: 1px solid rgba(255,255,255,0.1); }
-        .type-btn { background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 10px; font-size: 11px; border: 1px solid transparent; }
-        .type-active { border-color: #f97316; color: #f97316; background: rgba(249, 115, 22, 0.1); }
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
     </style>
 </head>
 <body>
@@ -28,93 +45,75 @@
 
     <div id="sidebar">
         <div class="flex justify-between items-center mb-10">
-            <span class="font-black text-orange-500 italic">DREAM MENU</span>
-            <button onclick="toggleSidebar()" class="text-xl"><i class="fas fa-times"></i></button>
+            <span class="font-black text-orange-500 italic">DREAM</span>
+            <button onclick="toggleSidebar()"><i class="fas fa-times text-xl"></i></button>
         </div>
         <div class="space-y-6">
-            <button onclick="showModal('customer-tab')" class="w-full text-right text-lg font-bold flex items-center justify-between">
+            <button onclick="showModal('customer-tab')" class="w-full text-right font-bold flex justify-between items-center">
                 <span>أرسل اقتراحك</span><i class="fas fa-pen-nib text-orange-500 text-sm"></i>
             </button>
             <hr class="border-white/5">
-            <button onclick="checkAdmin()" class="w-full text-right text-lg font-bold flex items-center justify-between opacity-30">
+            <button onclick="checkAdmin()" class="w-full text-right font-bold flex justify-between items-center opacity-30">
                 <span>الإدارة</span><span>🔒</span>
             </button>
         </div>
     </div>
 
-    <nav class="p-6 flex justify-between items-center">
-        <button onclick="toggleSidebar()" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10"><i class="fas fa-bars"></i></button>
-        <div class="font-black text-xl italic text-orange-500">SHAWARMA DREAM</div>
-        <div class="w-10"></div>
-    </nav>
+    <section class="hero">
+        <nav class="absolute top-0 w-full p-6 flex justify-between items-center">
+            <button class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md"><i class="fas fa-shopping-bag"></i></button>
+            <div class="font-black italic tracking-widest">DREAM SHAWARMA</div>
+            <button onclick="toggleSidebar()" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md"><i class="fas fa-bars"></i></button>
+        </nav>
 
-    <main class="max-w-xl mx-auto px-4 pb-48">
-        <div id="menu-sections"></div>
+        <div>
+            <p class="hero-subtitle">PREMIUM QUALITY</p>
+            <h1 class="hero-title">Taste the <br><span class="text-orange-500 italic">Dream</span></h1>
+            <button onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})" class="btn-order">اطلب الآن</button>
+        </div>
+    </section>
+
+    <div class="branch-scroll">
+        <button class="branch-btn branch-active">فرع شارع 32</button>
+        <button class="branch-btn">فرع حدا</button>
+        <button class="branch-btn">فرع خط العين</button>
+    </div>
+
+    <main id="menu" class="px-5 pb-40">
+        <div id="menu-content"></div>
     </main>
 
-    <div id="cart-footer" class="cart-footer hidden">
-        <div class="flex justify-between items-center mb-4">
-            <div class="flex gap-2">
-                <button id="btn-pickup" onclick="setOrderType('استلام')" class="type-btn type-active">استلام</button>
-                <button id="btn-delivery" onclick="setOrderType('توصيل')" class="type-btn">توصيل</button>
-            </div>
-            <div class="text-right">
-                <p id="total-price" class="text-xl font-black text-orange-500">0 ريال</p>
-            </div>
-        </div>
-        <button onclick="checkout()" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex justify-center items-center gap-2">
-            إتمام الطلب عبر واتساب <i class="fab fa-whatsapp"></i>
-        </button>
-    </div>
-
-    <div id="customer-tab" class="modal">
-        <div class="bg-[#121212] p-6 rounded-3xl w-full max-w-sm border border-white/10">
-            <h3 class="text-xl font-black mb-4">اقتراح جديد ✨</h3>
-            <input id="guest-name" type="text" placeholder="اسمك" class="w-full bg-white/5 p-4 rounded-xl mb-3 border border-white/10 outline-none">
-            <textarea id="guest-msg" placeholder="اكتب رأيك هنا..." class="w-full bg-white/5 p-4 rounded-xl mb-4 h-24 border border-white/10 outline-none"></textarea>
-            <div class="flex gap-2">
-                <button onclick="closeModal('customer-tab')" class="flex-1 bg-white/5 py-3 rounded-xl">إلغاء</button>
-                <button onclick="saveSuggestion()" class="flex-1 bg-orange-600 text-black font-black py-3 rounded-xl">إرسال</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        const branches = { 'شارع 32': '966546656090' };
-        let cart = [];
-        let orderType = 'استلام';
-
         const menuData = {
-            "🌯 قسم الشاورما": [
-                {n:"شاورما دجاج صغير", p:6, cat:"food", img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300"},
-                {n:"شاورما دجاج كبير", p:8, cat:"food", img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300"},
-                {n:"صحن عربي كبير", p:19, cat:"food", img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300"}
+            "🌯 قسم الشاورما والصحون": [
+                {n:"شاورما دجاج صغير", p:6, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300"},
+                {n:"شاورما دجاج كبير", p:8, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300"},
+                {n:"صحن عربي كبير", p:19, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300"}
             ],
             "🍔 قسم البرجر": [
-                {n:"برجر دجاج", p:10, cat:"food", img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300"},
-                {n:"برجر دجاج بالجبنة", p:12, cat:"food", img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300"}
+                {n:"برجر دجاج", p:10, img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300"},
+                {n:"برجر دجاج بالجبنة", p:12, img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300"}
             ],
             "🍕 قسم الباشكا": [
-                {n:"باشكا دجاج صغير", p:13, cat:"food", img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300"},
-                {n:"باشكا دجاج كبير", p:18, cat:"food", img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300"}
+                {n:"باشكا صغير", p:13, img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300"},
+                {n:"باشكا كبير", p:18, img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300"}
             ],
             "🥤 المشروبات": [
-                {n:"بيبسي", p:2.5, cat:"drink", img:"https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300"},
-                {n:"ماء", p:1, cat:"drink", img:"https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300"}
+                {n:"بيبسي", p:2.5, img:"https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300"},
+                {n:"ماء", p:1, img:"https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300"}
             ]
         };
 
         function render() {
-            const root = document.getElementById('menu-sections');
-            root.innerHTML = '';
+            const root = document.getElementById('menu-content');
             for (const [cat, items] of Object.entries(menuData)) {
-                let html = `<div class="mb-8"><h2 class="text-sm font-black mb-3 border-r-4 border-orange-500 pr-2">${cat}</h2><div class="horizontal-scroll">`;
+                let html = `<div class="mt-8"><h2 class="text-lg font-black mb-2 border-r-4 border-orange-500 pr-2">${cat}</h2><div class="horizontal-scroll">`;
                 items.forEach(item => {
                     html += `<div class="food-card">
                         <img src="${item.img}">
-                        <h4 class="text-[10px] font-bold mt-2 h-6">${item.n}</h4>
-                        <p class="text-orange-500 font-black text-xs my-2">${item.p} ريال</p>
-                        <button onclick="add('${item.n}', ${item.p})" class="w-full bg-orange-600 text-black font-black py-2 rounded-xl text-[9px]">أضف</button>
+                        <h4 class="text-xs font-bold mt-2 h-8">${item.n}</h4>
+                        <p class="text-orange-500 font-black text-sm my-1">${item.p} ريال</p>
+                        <button class="w-full bg-orange-600 text-black font-black py-2 rounded-xl text-[10px]">أضف للطلب</button>
                     </div>`;
                 });
                 root.innerHTML += html + `</div></div>`;
@@ -129,31 +128,6 @@
             o.style.display = isOpen ? 'none' : 'block';
         }
 
-        function add(n, p) { cart.push({n, p}); updateUI(); }
-        function updateUI() {
-            const f = document.getElementById('cart-footer');
-            f.classList.toggle('hidden', cart.length === 0);
-            document.getElementById('total-price').innerText = cart.reduce((s, i) => s + i.p, 0) + ' ريال';
-        }
-        function setOrderType(t) {
-            orderType = t;
-            document.getElementById('btn-pickup').classList.toggle('type-active', t === 'استلام');
-            document.getElementById('btn-delivery').classList.toggle('type-active', t === 'توصيل');
-        }
-        function showModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        
-        function checkAdmin() { if(prompt("الرمز:") === "12340") alert("سيتم عرض الاقتراحات هنا"); }
-
-        function checkout() {
-            const total = cart.reduce((s, i) => s + i.p, 0);
-            const summary = {};
-            cart.forEach(i => summary[i.n] = (summary[i.n] || 0) + 1);
-            let itemsText = "";
-            for (const [name, qty] of Object.entries(summary)) itemsText += `• ${qty}x ${name}\n`;
-            let msg = `📦 *طلب جديد*\n---\n🍱 *النوع:* ${orderType}\n\n📝 *الطلبات:*\n${itemsText}\n---\n💰 *الحساب: ${total} ريال*`;
-            window.open(`https://wa.me/966546656090?text=${encodeURIComponent(msg)}`);
-        }
         render();
     </script>
 </body>
