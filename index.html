@@ -3,77 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dream Shawarma | شاورما دريم</title>
+    <title>Dream Shawarma | المنيو الشامل</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { font-family: 'Tajawal', sans-serif; background-color: #0a0a0a; color: white; overflow-x: hidden; }
         .horizontal-scroll { display: flex; overflow-x: auto; gap: 12px; padding: 15px 5px; scrollbar-width: none; }
-        .food-card { flex: 0 0 150px; background: rgba(255, 255, 255, 0.03); border-radius: 1.5rem; padding: 10px; border: 1px solid rgba(255,255,255,0.08); }
-        .food-card img { width: 100%; height: 90px; object-fit: cover; border-radius: 1rem; }
+        .food-card { flex: 0 0 160px; background: rgba(255, 255, 255, 0.03); border-radius: 1.5rem; padding: 10px; border: 1px solid rgba(255,255,255,0.08); }
+        .food-card img { width: 100%; height: 100px; object-fit: cover; border-radius: 1rem; }
+        
+        #sidebar { position: fixed; right: -280px; top: 0; width: 280px; height: 100%; background: #0f0f0f; z-index: 300; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 40px 20px; border-left: 1px solid #222; }
+        #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 250; display: none; backdrop-filter: blur(4px); }
+        
         .cart-footer { position: fixed; bottom: 0; width: 100%; background: rgba(15,15,15,0.98); backdrop-blur: 20px; border-radius: 2rem 2rem 0 0; padding: 15px 20px; z-index: 100; border-top: 1px solid rgba(255,255,255,0.1); }
-        .type-btn { background: rgba(255,255,255,0.05); padding: 8px 15px; border-radius: 10px; font-size: 12px; border: 1px solid transparent; }
+        .type-btn { background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 10px; font-size: 11px; border: 1px solid transparent; }
         .type-active { border-color: #f97316; color: #f97316; background: rgba(249, 115, 22, 0.1); }
-        #sidebar { position: fixed; right: -100%; top: 0; width: 280px; height: 100%; background: #111; z-index: 200; transition: 0.3s; padding: 40px 20px; border-left: 1px solid #222; overflow-y: auto; }
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
     </style>
 </head>
 <body>
 
+    <div id="overlay" onclick="toggleSidebar()"></div>
+
     <div id="sidebar">
-        <button onclick="toggleSidebar()" class="mb-10 text-2xl"><i class="fas fa-times"></i></button>
+        <div class="flex justify-between items-center mb-10">
+            <span class="font-black text-orange-500 italic">DREAM MENU</span>
+            <button onclick="toggleSidebar()" class="text-xl"><i class="fas fa-times"></i></button>
+        </div>
         <div class="space-y-6">
-            <button onclick="showModal('customer-tab')" class="w-full text-right text-lg font-bold"><i class="fas fa-pen-nib ml-2 text-orange-500"></i> أرسل اقتراحك</button>
-            <hr class="border-white/10">
-            <button onclick="checkAdmin()" class="w-full text-right text-lg font-bold text-gray-500 italic"><i class="fas fa-lock ml-2"></i> لوحة الاقتراحات (خاص)</button>
+            <button onclick="showModal('customer-tab')" class="w-full text-right text-lg font-bold flex items-center justify-between">
+                <span>أرسل اقتراحك</span><i class="fas fa-pen-nib text-orange-500 text-sm"></i>
+            </button>
+            <hr class="border-white/5">
+            <button onclick="checkAdmin()" class="w-full text-right text-lg font-bold flex items-center justify-between opacity-30">
+                <span>الإدارة</span><span>🔒</span>
+            </button>
         </div>
     </div>
 
+    <nav class="p-6 flex justify-between items-center">
+        <button onclick="toggleSidebar()" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10"><i class="fas fa-bars"></i></button>
+        <div class="font-black text-xl italic text-orange-500">SHAWARMA DREAM</div>
+        <div class="w-10"></div>
+    </nav>
+
+    <main class="max-w-xl mx-auto px-4 pb-48">
+        <div id="menu-sections"></div>
+    </main>
+
+    <div id="cart-footer" class="cart-footer hidden">
+        <div class="flex justify-between items-center mb-4">
+            <div class="flex gap-2">
+                <button id="btn-pickup" onclick="setOrderType('استلام')" class="type-btn type-active">استلام</button>
+                <button id="btn-delivery" onclick="setOrderType('توصيل')" class="type-btn">توصيل</button>
+            </div>
+            <div class="text-right">
+                <p id="total-price" class="text-xl font-black text-orange-500">0 ريال</p>
+            </div>
+        </div>
+        <button onclick="checkout()" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex justify-center items-center gap-2">
+            إتمام الطلب عبر واتساب <i class="fab fa-whatsapp"></i>
+        </button>
+    </div>
+
     <div id="customer-tab" class="modal">
-        <div class="bg-[#1a1a1a] p-6 rounded-3xl w-full max-w-sm">
+        <div class="bg-[#121212] p-6 rounded-3xl w-full max-w-sm border border-white/10">
             <h3 class="text-xl font-black mb-4">اقتراح جديد ✨</h3>
-            <input id="guest-name" type="text" placeholder="اسمك الكريم" class="w-full bg-white/5 p-4 rounded-xl mb-3 outline-none border border-white/10">
-            <textarea id="guest-msg" placeholder="اكتب اقتراحك هنا..." class="w-full bg-white/5 p-4 rounded-xl mb-4 h-32 outline-none border border-white/10"></textarea>
+            <input id="guest-name" type="text" placeholder="اسمك" class="w-full bg-white/5 p-4 rounded-xl mb-3 border border-white/10 outline-none">
+            <textarea id="guest-msg" placeholder="اكتب رأيك هنا..." class="w-full bg-white/5 p-4 rounded-xl mb-4 h-24 border border-white/10 outline-none"></textarea>
             <div class="flex gap-2">
                 <button onclick="closeModal('customer-tab')" class="flex-1 bg-white/5 py-3 rounded-xl">إلغاء</button>
                 <button onclick="saveSuggestion()" class="flex-1 bg-orange-600 text-black font-black py-3 rounded-xl">إرسال</button>
             </div>
         </div>
-    </div>
-
-    <div id="admin-tab" class="modal">
-        <div class="bg-[#1a1a1a] p-6 rounded-3xl w-full max-w-sm h-[70vh] flex flex-col">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-black text-orange-500">صندوق الاقتراحات</h3>
-                <button onclick="closeModal('admin-tab')"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="suggestions-list" class="flex-1 overflow-y-auto space-y-3 pr-1">
-                <p class="text-gray-500 text-center mt-10">لا توجد اقتراحات حالياً</p>
-            </div>
-            <button onclick="clearLogs()" class="mt-4 text-xs text-red-500 opacity-50">مسح الكل</button>
-        </div>
-    </div>
-
-    <nav class="p-6 flex justify-between items-center">
-        <button onclick="toggleSidebar()" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center"><i class="fas fa-bars"></i></button>
-        <div class="font-black text-xl italic text-orange-500 tracking-tighter">DREAM SHAWARMA</div>
-        <div class="w-10"></div>
-    </nav>
-
-    <main class="max-w-xl mx-auto px-4 pb-40">
-        <div id="menu-sections"></div>
-    </main>
-
-    <div id="cart-footer" class="cart-footer hidden">
-        <div class="flex justify-between items-center mb-3">
-            <div class="flex gap-2">
-                <button id="btn-pickup" onclick="setOrderType('استلام')" class="type-btn type-active">استلام</button>
-                <button id="btn-delivery" onclick="setOrderType('توصيل')" class="type-btn">توصيل</button>
-            </div>
-            <span id="total-price" class="text-xl font-black text-orange-500">0 ريال</span>
-        </div>
-        <button onclick="checkout()" class="w-full bg-[#25D366] text-black font-black py-4 rounded-xl flex justify-center items-center gap-2">إتمام الطلب <i class="fab fa-whatsapp"></i></button>
     </div>
 
     <script>
@@ -82,17 +85,22 @@
         let orderType = 'استلام';
 
         const menuData = {
-            "🌯 قسم الشاورما والصحون": [
-                {n:"شاورما دجاج صغير", p:6, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200"},
-                {n:"شاورما دجاج كبير", p:8, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200"},
-                {n:"شاورما صغير بالجبنة", p:7, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200"},
-                {n:"شاورما كبير بالجبنة", p:9, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200"},
-                {n:"صحن عربي كبير", p:19, img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=200"}
+            "🌯 قسم الشاورما": [
+                {n:"شاورما دجاج صغير", p:6, cat:"food", img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300"},
+                {n:"شاورما دجاج كبير", p:8, cat:"food", img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300"},
+                {n:"صحن عربي كبير", p:19, cat:"food", img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300"}
+            ],
+            "🍔 قسم البرجر": [
+                {n:"برجر دجاج", p:10, cat:"food", img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300"},
+                {n:"برجر دجاج بالجبنة", p:12, cat:"food", img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300"}
+            ],
+            "🍕 قسم الباشكا": [
+                {n:"باشكا دجاج صغير", p:13, cat:"food", img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300"},
+                {n:"باشكا دجاج كبير", p:18, cat:"food", img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300"}
             ],
             "🥤 المشروبات": [
-                {n:"بيبسي", p:2.5, img:"https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200"},
-                {n:"كوكاكولا", p:2.5, img:"https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200"},
-                {n:"ماء", p:1, img:"https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=200"}
+                {n:"بيبسي", p:2.5, cat:"drink", img:"https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300"},
+                {n:"ماء", p:1, cat:"drink", img:"https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300"}
             ]
         };
 
@@ -100,60 +108,26 @@
             const root = document.getElementById('menu-sections');
             root.innerHTML = '';
             for (const [cat, items] of Object.entries(menuData)) {
-                let html = `<div class="mb-6"><h2 class="text-md font-black mb-2 border-r-4 border-orange-500 pr-2">${cat}</h2><div class="horizontal-scroll">`;
+                let html = `<div class="mb-8"><h2 class="text-sm font-black mb-3 border-r-4 border-orange-500 pr-2">${cat}</h2><div class="horizontal-scroll">`;
                 items.forEach(item => {
                     html += `<div class="food-card">
                         <img src="${item.img}">
                         <h4 class="text-[10px] font-bold mt-2 h-6">${item.n}</h4>
                         <p class="text-orange-500 font-black text-xs my-2">${item.p} ريال</p>
-                        <button onclick="add('${item.n}', ${item.p})" class="w-full bg-orange-600 text-black font-black py-1.5 rounded-lg text-[9px]">أضف</button>
+                        <button onclick="add('${item.n}', ${item.p})" class="w-full bg-orange-600 text-black font-black py-2 rounded-xl text-[9px]">أضف</button>
                     </div>`;
                 });
                 root.innerHTML += html + `</div></div>`;
             }
         }
 
-        function toggleSidebar() { const s = document.getElementById('sidebar'); s.style.right = s.style.right === '0px' ? '-100%' : '0px'; }
-        function showModal(id) { document.getElementById(id).style.display = 'flex'; toggleSidebar(); }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-        // نظام الاقتراحات
-        function saveSuggestion() {
-            const name = document.getElementById('guest-name').value;
-            const msg = document.getElementById('guest-msg').value;
-            if(!name || !msg) return alert("يرجى ملء كافة الخانات");
-            
-            const logs = JSON.parse(localStorage.getItem('shop_logs') || '[]');
-            logs.push({ name, msg, date: new Date().toLocaleString('ar-SA') });
-            localStorage.setItem('shop_logs', JSON.stringify(logs));
-            
-            alert("تم إرسال اقتراحك بنجاح، شكراً لك!");
-            document.getElementById('guest-name').value = '';
-            document.getElementById('guest-msg').value = '';
-            closeModal('customer-tab');
+        function toggleSidebar() {
+            const s = document.getElementById('sidebar');
+            const o = document.getElementById('overlay');
+            const isOpen = s.style.right === '0px';
+            s.style.right = isOpen ? '-280px' : '0px';
+            o.style.display = isOpen ? 'none' : 'block';
         }
-
-        function checkAdmin() {
-            const pass = prompt("أدخل رمز الدخول لرؤية الاقتراحات:");
-            if(pass === "12340") {
-                loadSuggestions();
-                showModal('admin-tab');
-            } else { alert("الرمز خطأ!"); }
-        }
-
-        function loadSuggestions() {
-            const list = document.getElementById('suggestions-list');
-            const logs = JSON.parse(localStorage.getItem('shop_logs') || '[]');
-            if(logs.length === 0) { list.innerHTML = '<p class="text-gray-500 text-center mt-10">لا توجد اقتراحات</p>'; return; }
-            list.innerHTML = logs.map(l => `
-                <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
-                    <div class="flex justify-between text-[10px] text-orange-500 mb-1 font-bold"><span>${l.name}</span><span>${l.date}</span></div>
-                    <p class="text-xs leading-relaxed">${l.msg}</p>
-                </div>
-            `).reverse().join('');
-        }
-
-        function clearLogs() { if(confirm("هل تريد مسح جميع الاقتراحات؟")) { localStorage.removeItem('shop_logs'); loadSuggestions(); } }
 
         function add(n, p) { cart.push({n, p}); updateUI(); }
         function updateUI() {
@@ -161,18 +135,23 @@
             f.classList.toggle('hidden', cart.length === 0);
             document.getElementById('total-price').innerText = cart.reduce((s, i) => s + i.p, 0) + ' ريال';
         }
-        function setOrderType(type) {
-            orderType = type;
-            document.getElementById('btn-pickup').classList.toggle('type-active', type === 'استلام');
-            document.getElementById('btn-delivery').classList.toggle('type-active', type === 'توصيل');
+        function setOrderType(t) {
+            orderType = t;
+            document.getElementById('btn-pickup').classList.toggle('type-active', t === 'استلام');
+            document.getElementById('btn-delivery').classList.toggle('type-active', t === 'توصيل');
         }
+        function showModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        
+        function checkAdmin() { if(prompt("الرمز:") === "12340") alert("سيتم عرض الاقتراحات هنا"); }
+
         function checkout() {
             const total = cart.reduce((s, i) => s + i.p, 0);
             const summary = {};
             cart.forEach(i => summary[i.n] = (summary[i.n] || 0) + 1);
             let itemsText = "";
             for (const [name, qty] of Object.entries(summary)) itemsText += `• ${qty}x ${name}\n`;
-            let msg = `📦 *طلب جديد*\n---\n🍱 *النوع:* ${orderType}\n${orderType === 'توصيل' ? '📍 *يرجى إرسال اللوكيشن*\n' : ''}\n📝 *الطلبات:*\n${itemsText}\n---\n💰 *الإجمالي: ${total} ريال*`;
+            let msg = `📦 *طلب جديد*\n---\n🍱 *النوع:* ${orderType}\n\n📝 *الطلبات:*\n${itemsText}\n---\n💰 *الحساب: ${total} ريال*`;
             window.open(`https://wa.me/966546656090?text=${encodeURIComponent(msg)}`);
         }
         render();
